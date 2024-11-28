@@ -52,10 +52,14 @@ class XAIService:
         response.raise_for_status()
         return response.json()['choices'][0]['message']['content']
 
+    def get_text_embedding_batch(self, texts: List[str]) -> List[List[float]]:
+        return [self.get_embedding(text) for text in texts]
+
 # Configure settings
 xai_service = XAIService(XAI_API_KEY)
 Settings.llm = xai_service
-Settings.embed_model = lambda text: xai_service.get_embedding(text)  # This now directly uses XAIService's embedding method
+Settings.embed_model = xai_service
+#Settings.embed_model = lambda text: xai_service.get_embedding(text)  # This now directly uses XAIService's embedding method
 Settings.text_splitter = SentenceSplitter(chunk_size=400)
 
 index = None
@@ -90,7 +94,7 @@ def load_documents(file_objs):
         index = VectorStoreIndex.from_documents(
             documents, 
             storage_context=storage_context,
-            embed_model=lambda text: xai_service.get_embedding(text)
+            embed_model=xai_service
         )
 
         # Create the query engine after the index is created
