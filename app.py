@@ -53,14 +53,14 @@ class XAIEmbedding:
         response.raise_for_status()
         return response.json()['data'][0]['embedding']
 
-    def get_text_embedding_batch(self, texts):
-        # This method will handle batch requests
-        embeddings = []
-        for text in texts:
-            embedding = self.get_text_embedding(text)
-            embeddings.append(embedding)
-        return embeddings
-
+    def get_text_embedding_batch(self, texts, show_progress=False):
+        # If show_progress is set to True, you could implement progress reporting here.
+        # However, since the requests library doesn't inherently support this, we'll just print if it's true.
+        if show_progress:
+            print("Generating embeddings for batch of texts...")
+        
+        return [self.get_text_embedding(text) for text in texts]
+        
 Settings.embed_model = XAIEmbedding()
 Settings.text_splitter = SentenceSplitter(chunk_size=400)
 
