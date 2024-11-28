@@ -136,7 +136,8 @@ with gr.Blocks() as demo:
 
     load_output = gr.Textbox(label="Load Status")
 
-    chatbot = gr.Chatbot()
+    chatbot = gr.Chatbot(type='messages')
+    #chatbot = gr.Chatbot()
     msg = gr.Textbox(label="Enter your question")
     clear = gr.Button("Clear")
 
@@ -145,4 +146,4 @@ with gr.Blocks() as demo:
     clear.click(lambda: None, None, chatbot, queue=False)
 
 if __name__ == "__main__":
-    demo.queue().launch(share=True, debug=True)
+    demo.queue().launch(share=True, debug=True, ssl_verify=False)
