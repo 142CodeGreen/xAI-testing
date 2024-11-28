@@ -4,8 +4,8 @@
 
 1. Clone the repository:
 ```
-git clone https://github.com/142CodeGreen/S1.git
-cd S1
+git clone https://github.com/142CodeGreen/xAI-testing.git
+cd xAI-testing
 ```
 
 2. Install the required packages:
