@@ -5,12 +5,14 @@ import requests
 from llama_index.core import Settings, SimpleDirectoryReader, VectorStoreIndex, StorageContext
 from llama_index.vector_stores.milvus import MilvusVectorStore
 from llama_index.core.node_parser import SentenceSplitter
-from requests.exceptions import RequestException, Timeout
+from requests.exceptions import RequestException # Timeout
 
 # Custom XAIService for embedding and chat completions
 class XAIService:
-    def __init__(self, api_key: str, base_url: str = "https://api.x.ai/v1"):
-        self.api_key = api_key
+    def __init__(self, base_url: str = "https://api.x.ai/v1"):
+        self.api_key = os.getenv('XAI_API_KEY')
+        if not self.api_key:
+            raise ValueError("XAI_API_KEY environment variable is not set")
         self.base_url = base_url
 
     def get_embedding(self, text):
