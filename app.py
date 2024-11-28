@@ -85,7 +85,7 @@ def load_documents(file_objs):
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
         # Create the index from the documents
-        index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
+        #index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
 
         index = VectorStoreIndex.from_documents(documents, 
             storage_context=storage_context,
