@@ -28,10 +28,6 @@ pip install --upgrade -r requirements.txt
 ```
 export XAI_API_KEY="your-api-key-here"
 echo $XAI_API_KEY
-
-export OPENAI_API_KEY="your-api-key-here"
-echo $OPENAI_API_KEY
-
 ```
 
 4. Run the app.py:
