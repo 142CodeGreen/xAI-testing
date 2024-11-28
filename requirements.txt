@@ -1,0 +1,14 @@
+llama-index-core==0.10.58  # Keep this since you're using LlamaIndex
+llama-index-readers-file==0.1.30  # Uncomment since you need it for reading documents
+#llama-index-llms-nvidia==0.1.4  # Comment out or remove, as we're switching to xAI
+#llama-index-embeddings-nvidia==0.1.4  # Comment out or remove
+#llama-index-postprocessor-nvidia-rerank  # Keep commented if not in use
+llama-index-vector-stores-Milvus==0.1.20
+ipywidgets
+gradio
+OpenAI  # Keep if xAI's API is compatible with OpenAI's format
+#langchain
+#langchain-nvidia-ai-endpoints
+transformers>=4.10
+torch
+requests  # For making API calls to xAI
