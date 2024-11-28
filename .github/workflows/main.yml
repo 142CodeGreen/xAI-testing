@@ -15,4 +15,4 @@ jobs:
       - name: Push to hub
         env:
           HF_TOKEN: ${{ secrets.HF_TOKEN }}
-        run: git push -f https://142CodeGreen:$HF_TOKEN@huggingface.co/spaces/denglhs/xAI-testing main
+        run: git push -f https://denglhs:$HF_TOKEN@huggingface.co/spaces/denglhs/xAI-testing main
