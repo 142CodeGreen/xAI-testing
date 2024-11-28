@@ -5,28 +5,34 @@ import requests
 from llama_index.core import Settings, SimpleDirectoryReader, VectorStoreIndex, StorageContext
 from llama_index.vector_stores.milvus import MilvusVectorStore
 from llama_index.core.node_parser import SentenceSplitter
-from requests.exceptions import RequestException # Timeout
+from requests.exceptions import RequestException
+from typing import List
 
-# Custom XAIService for embedding and chat completions
+# Configure xAI API settings
+XAI_API_KEY = os.getenv('XAI_API_KEY')
+
 class XAIService:
-    def __init__(self, base_url: str = "https://api.x.ai/v1"):
-        self.api_key = os.getenv('XAI_API_KEY')
-        if not self.api_key:
-            raise ValueError("XAI_API_KEY environment variable is not set")
+    def __init__(self, base_url: str = "https://api.x.ai/v1", api_key: str = None):
+        if api_key is None:
+            self.api_key = os.getenv('XAI_API_KEY')
+            if not self.api_key:
+                raise ValueError("XAI_API_KEY environment variable is not set or api_key not provided")
+        else:
+            self.api_key = api_key
         self.base_url = base_url
 
-    def get_embedding(self, text):
+    def get_embedding(self, text: str) -> List[float]:
         endpoint = f"{self.base_url}/embeddings"
-        payload = {"input": text}
-        response = requests.post(endpoint, headers={
+        headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
             "Accept": "application/json"
-        }, json=payload)
+        }
+        response = requests.post(endpoint, headers=headers, json={"input": text})
         response.raise_for_status()
         return response.json()['data'][0]['embedding']
 
-    def get_response(self, user_message, system_message="You are a helpful AI assistant.", model="grok-beta", temperature=0.7):
+    def get_response(self, user_message: str, system_message: str = "You are an AI with access to external documents.", model: str = "grok-beta", temperature: float = 0.7) -> str:
         endpoint = f"{self.base_url}/chat/completions"
         payload = {
             "messages": [
@@ -37,24 +43,20 @@ class XAIService:
             "temperature": temperature,
             "stream": False
         }
-        response = requests.post(endpoint, headers={
+        headers = {
             "Authorization": f"Bearer {self.api_key}",
             "Content-Type": "application/json",
             "Accept": "application/json"
-        }, json=payload)
+        }
+        response = requests.post(endpoint, headers=headers, json=payload)
         response.raise_for_status()
         return response.json()['choices'][0]['message']['content']
-        
-# Configure xAI API settings
-XAI_API_KEY = os.getenv('XAI_API_KEY')
-
-# Initialize XAIService
-xai_service = XAIService(XAI_API_KEY)
 
 # Configure settings
-Settings.embed_model = xai_service.get_embedding  # Now using xAI's embedding service
+xai_service = XAIService(XAI_API_KEY)
+Settings.llm = xai_service
+Settings.embed_model = lambda text: xai_service.get_embedding(text)  # This now directly uses XAIService's embedding method
 Settings.text_splitter = SentenceSplitter(chunk_size=400)
-Settings.llm = xai_service  # Use XAIService for LLM interaction
 
 index = None
 query_engine = None
