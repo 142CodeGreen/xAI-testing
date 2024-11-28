@@ -87,9 +87,11 @@ def load_documents(file_objs):
         # Create the index from the documents
         #index = VectorStoreIndex.from_documents(documents, storage_context=storage_context)
 
-        index = VectorStoreIndex.from_documents(documents, 
+        index = VectorStoreIndex.from_documents(
+            documents, 
             storage_context=storage_context,
-            embed_model=xai_service.get_embedding)  # Directly passing the function instead of a class
+            embed_model=lambda text: xai_service.get_embedding(text)
+        )
 
         # Create the query engine after the index is created
         query_engine = index.as_query_engine(similarity_top_k=20, streaming=True)
