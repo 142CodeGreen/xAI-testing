@@ -44,7 +44,7 @@ class XAIService:
         }, json=payload)
         response.raise_for_status()
         return response.json()['choices'][0]['message']['content']
-
+        
 # Configure xAI API settings
 XAI_API_KEY = os.getenv('XAI_API_KEY')
 
