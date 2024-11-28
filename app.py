@@ -57,11 +57,11 @@ Settings.embed_model = XAIEmbedding()
 Settings.text_splitter = SentenceSplitter(chunk_size=400)
 
 # Ensure GPU usage
-if torch.cuda.is_available():
-    logger.info("GPU is available and will be used.")
-    os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # Assuming you want to use GPU 0
-else:
-    logger.warning("GPU not detected or not configured correctly. Falling back to CPU.")
+#if torch.cuda.is_available():
+#    logger.info("GPU is available and will be used.")
+#    os.environ['CUDA_VISIBLE_DEVICES'] = '0'  # Assuming you want to use GPU 0
+#else:
+#    logger.warning("GPU not detected or not configured correctly. Falling back to CPU.")
 
 index = None
 query_engine = None
