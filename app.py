@@ -109,7 +109,23 @@ def chat(message, history):
         logger.error(f"Error processing query: {str(e)}")
         return history + [(message, f"Error processing query: {str(e)}")]
 
-# ... The rest of the Gradio interface setup remains unchanged ...
+# Create the Gradio interface
+with gr.Blocks() as demo:
+    gr.Markdown("# RAG Chatbot")
+
+    with gr.Row():
+        file_input = gr.File(label="Select files to upload", file_count="multiple")
+        load_btn = gr.Button("Load Documents")
+
+    load_output = gr.Textbox(label="Load Status")
+
+    chatbot = gr.Chatbot(type='messages')
+    msg = gr.Textbox(label="Enter your question")
+    clear = gr.Button("Clear")
+
+    load_btn.click(load_documents, inputs=[file_input], outputs=[load_output])
+    msg.submit(chat, [msg, chatbot], chatbot)
+    clear.click(lambda: None, None, chatbot, queue=False)
 
 if __name__ == "__main__":
     demo.queue().launch(share=True, debug=True, ssl_verify=False)
