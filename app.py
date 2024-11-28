@@ -11,34 +11,19 @@ from llama_index.core.node_parser import SentenceSplitter
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-# Assuming xAI provides their endpoint for generating text
-XAI_API_URL = "https://api.x.ai/v1/chat/completions"
+# xAI API Base URL (Adjust as needed)
+XAI_API_BASE = "https://api.x.ai/"
 
-# Custom LLM class for xAI
-class XAILLM:
-    def __init__(self):
-        self.api_key = os.getenv('XAI_API_KEY')
-        if not self.api_key:
-            raise ValueError("XAI_API_KEY environment variable is not set")
+# Construct specific endpoints
+XAI_API_KEY = os.getenv('XAI_API_KEY')
+XAI_API_URL_EMBEDDINGS = f"{XAI_API_BASE}v1/embeddings"
+XAI_API_URL_CHAT_COMPLETIONS = f"{XAI_API_BASE}v1/chat/completions"
 
-    def complete(self, prompt, **kwargs):
-        headers = {"Authorization": f"Bearer {self.api_key}", "Content-Type": "application/json"}
-        data = {
-            "model": "grok-beta",  # Adjust model name as per xAI's API
-            "messages": [{"role": "user", "content": prompt}],
-            "stream": True  # or True if you want streaming responses
-        }
-        response = requests.post(XAI_API_URL, headers=headers, json=data)
-        response.raise_for_status()
-        return response.json()['choices'][0]['message']['content']  # Adjust based on actual API response structure
-
-Settings.llm = XAILLM()
-
-# Custom Embedding class for xAI
+# Custom embedding class for xAI
 class XAIEmbedding:
     def __init__(self):
-        self.api_key = os.getenv('XAI_API_KEY')
-        self.model_id = "v1"  # Adjust as per xAI's model ID
+        self.api_key = XAI_API_KEY
+        self.model_id = "v1"  # Adjust as per xAI's model ID for embeddings
 
     def get_text_embedding(self, text):
         headers = {
@@ -49,20 +34,38 @@ class XAIEmbedding:
             "input": text,
             "model": self.model_id
         }
-        response = requests.post(XAI_API_URL, headers=headers, json=data)
+        response = requests.post(XAI_API_URL_EMBEDDINGS, headers=headers, json=data)
         response.raise_for_status()
         return response.json()['data'][0]['embedding']
 
     def get_text_embedding_batch(self, texts, show_progress=False):
-        # If show_progress is set to True, you could implement progress reporting here.
-        # However, since the requests library doesn't inherently support this, we'll just print if it's true.
         if show_progress:
             print("Generating embeddings for batch of texts...")
-        
         return [self.get_text_embedding(text) for text in texts]
-        
+
+# Custom LLM class for xAI
+class XAILLM:
+    def __init__(self):
+        self.api_key = XAI_API_KEY
+        self.model = "grok"  # Adjust as per xAI's model ID for text generation
+
+    def complete(self, prompt, **kwargs):
+        headers = {
+            "Authorization": f"Bearer {self.api_key}",
+            "Content-Type": "application/json"
+        }
+        data = {
+            "model": self.model,
+            "messages": [{"role": "user", "content": prompt}]
+        }
+        response = requests.post(XAI_API_URL_CHAT_COMPLETIONS, headers=headers, json=data)
+        response.raise_for_status()
+        return response.json()['choices'][0]['message']['content']
+
+# Configure settings
 Settings.embed_model = XAIEmbedding()
 Settings.text_splitter = SentenceSplitter(chunk_size=400)
+Settings.llm = XAILLM()
 
 # Ensure GPU usage
 #if torch.cuda.is_available():
