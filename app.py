@@ -52,9 +52,13 @@ class XAIService:
         response.raise_for_status()
         return response.json()['choices'][0]['message']['content']
 
-    def get_text_embedding_batch(self, texts: List[str]) -> List[List[float]]:
-        return [self.get_embedding(text) for text in texts]
+    def get_text_embedding_batch(self, texts: List[str], **kwargs) -> List[List[float]]:
+        if 'show_progress' in kwargs and kwargs['show_progress']:
+            # Optionally handle progress display
+            print("Processing embeddings...")
 
+        return [self.get_embedding(text) for text in texts]
+        
 # Configure settings
 xai_service = XAIService(XAI_API_KEY)
 Settings.llm = xai_service
