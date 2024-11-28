@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Assuming xAI provides their endpoint for generating text
-XAI_API_URL = "https://api.x.ai/v1"
+XAI_API_URL = "https://api.x.ai/v1/chat/completions"
 
 # Custom LLM class for xAI
 class XAILLM:
