@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # xAI API Base URL (Adjust as needed)
-XAI_API_BASE = "https://api.x.ai/"
+XAI_API_BASE = "https://api.x.ai/v1"
 
 # Construct specific endpoints
 XAI_API_KEY = os.getenv('XAI_API_KEY')
