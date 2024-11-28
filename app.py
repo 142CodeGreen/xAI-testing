@@ -11,7 +11,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Assuming xAI provides their endpoint for generating text
-XAI_API_URL = "https://api.x.ai/v1/chat/completions"  # Replace with actual endpoint
+XAI_API_URL = "https://api.x.ai/v1/chat/completions"
 
 # Custom LLM class for xAI
 class XAILLM:
@@ -25,7 +25,7 @@ class XAILLM:
         data = {
             "model": "grok-beta",  # Adjust model name as per xAI's API
             "messages": [{"role": "user", "content": prompt}],
-            "stream": False  # or True if you want streaming responses
+            "stream": True  # or True if you want streaming responses
         }
         response = requests.post(XAI_API_URL, headers=headers, json=data)
         response.raise_for_status()
@@ -37,7 +37,7 @@ Settings.llm = XAILLM()
 class XAIEmbedding:
     def __init__(self):
         self.api_key = os.getenv('XAI_API_KEY')
-        self.model_id = "v1"  # Replace with the correct model ID
+        self.model_id = "v1"
 
     def get_text_embedding(self, text):
         headers = {
