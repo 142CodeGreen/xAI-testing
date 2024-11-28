@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Assuming xAI provides their endpoint for generating text
-XAI_API_URL = "https://api.x.ai/v1/embeddings"
+XAI_API_URL = "https://api.x.ai/v1"
 
 # Custom LLM class for xAI
 class XAILLM:
