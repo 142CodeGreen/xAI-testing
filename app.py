@@ -12,7 +12,7 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 # Assuming xAI provides their endpoint for generating text
-XAI_API_URL = "https://api.x.ai/v1/chat/completions"
+XAI_API_URL = "https://api.x.ai/v1/embeddings"
 
 # Custom LLM class for xAI
 class XAILLM:
@@ -38,7 +38,7 @@ Settings.llm = XAILLM()
 class XAIEmbedding:
     def __init__(self):
         self.api_key = os.getenv('XAI_API_KEY')
-        self.model_id = "v1"
+        self.model_id = "v1"  # Adjust as per xAI's model ID
 
     def get_text_embedding(self, text):
         headers = {
@@ -49,9 +49,17 @@ class XAIEmbedding:
             "input": text,
             "model": self.model_id
         }
-        response = requests.post("xAI's embed endpoint URL", headers=headers, json=data)
+        response = requests.post(XAI_API_URL, headers=headers, json=data)
         response.raise_for_status()
-        return response.json()['data'][0]['embedding']  # Adjust based on xAI's API response structure
+        return response.json()['data'][0]['embedding']
+
+    def get_text_embedding_batch(self, texts):
+        # This method will handle batch requests
+        embeddings = []
+        for text in texts:
+            embedding = self.get_text_embedding(text)
+            embeddings.append(embedding)
+        return embeddings
 
 Settings.embed_model = XAIEmbedding()
 Settings.text_splitter = SentenceSplitter(chunk_size=400)
