@@ -71,13 +71,15 @@ def load_documents(file_objs):
         if not documents:
             return f"No documents found in the selected files."
 
-        vector_store = MilvusVectorStore(
-            host="127.0.0.1",
-            port=19530,
-            dim=1024,  # Ensure this matches xAI's embedding model output dimension
-            collection_name="your_collection_name",
-            gpu_id=0
-        )
+        #vector_store = MilvusVectorStore(
+        #    host="127.0.0.1",
+        #    port=19530,
+        #    dim=1024,  # Ensure this matches xAI's embedding model output dimension
+        #    collection_name="your_collection_name",
+        #    gpu_id=0
+        #)
+        
+        vector_store = MilvusVectorStore(uri="./milvus_demo.db", dim=1024, overwrite=True,output_fields=[])  # use CPU
         storage_context = StorageContext.from_defaults(vector_store=vector_store)
 
         # Create the index from the documents
