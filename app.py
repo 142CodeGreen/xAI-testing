@@ -6,7 +6,7 @@ from llama_index.core import Settings, SimpleDirectoryReader, VectorStoreIndex, 
 from llama_index.vector_stores.milvus import MilvusVectorStore
 from llama_index.core.node_parser import SentenceSplitter
 #from openai import OpenAI
-import torch
+#import torch
 
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
