@@ -6,9 +6,9 @@ llama-index-readers-file==0.1.30  # Uncomment since you need it for reading docu
 llama-index-vector-stores-Milvus==0.1.20
 ipywidgets
 gradio
-OpenAI  # Keep if xAI's API is compatible with OpenAI's format
+#OpenAI  # Keep if xAI's API is compatible with OpenAI's format
 #langchain
 #langchain-nvidia-ai-endpoints
-transformers>=4.10
-torch
+#transformers>=4.10
+#torch
 requests  # For making API calls to xAI
