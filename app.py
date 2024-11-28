@@ -16,8 +16,8 @@ XAI_API_BASE = "https://api.x.ai/v1"
 
 # Construct specific endpoints
 XAI_API_KEY = os.getenv('XAI_API_KEY')
-XAI_API_URL_EMBEDDINGS = f"{XAI_API_BASE}v1/embeddings"
-XAI_API_URL_CHAT_COMPLETIONS = f"{XAI_API_BASE}v1/chat/completions"
+XAI_API_URL_EMBEDDINGS = f"{XAI_API_BASE}/embeddings"
+XAI_API_URL_CHAT_COMPLETIONS = f"{XAI_API_BASE}/chat/completions"
 
 # Custom embedding class for xAI
 class XAIEmbedding:
